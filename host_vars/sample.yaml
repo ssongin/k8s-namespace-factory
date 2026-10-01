@@ -1,0 +1,21 @@
+---
+state: present # Default state "present" can be overridden to "absent" to delete the namespace and associated resources
+
+configurationItem:
+  owner: "Your-Team-Name"
+  environment: "Development"
+  serviceOffering: "sample-service"
+  description: "Sample namespace"
+  costCenterCode: "CCC-1111"
+  criticalityClass: "CC-1"
+
+namespace:
+  name: "sample-namespace"
+  annotations:
+    description: "{{ configurationItem.description }}"
+  labels:
+    team: "{{ configurationItem.owner }}"
+    environment: "{{ configurationItem.environment }}"
+    service-offering: "{{ configurationItem.serviceOffering }}"
+    cost-center: "{{ configurationItem.costCenterCode }}"
+    criticality: "{{ configurationItem.criticalityClass }}"

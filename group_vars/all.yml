@@ -1,0 +1,20 @@
+namespace_resource_defaults:
+  requests:
+    enabled: true
+    cpu: "400m"
+    memory: "100Mi"
+  limits:
+    enabled: true
+    cpu: "800m"
+    memory: "300Mi"
+
+container_resource_defaults:
+  resources:
+    requests:
+      enabled: true
+      cpu: "200m"
+      memory: "100Mi"
+    limits:
+      enabled: true
+      cpu: "800m"
+      memory: "300Mi"      

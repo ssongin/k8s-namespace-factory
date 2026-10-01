@@ -1,0 +1,37 @@
+---
+- name: Manage ResourceQuota for {{ namespace.name }} namespace
+  kubernetes.core.k8s:
+    state: "{{ state }}"
+    definition:
+      apiVersion: v1
+      kind: ResourceQuota
+      metadata:
+        name: "{{ namespace.name }}-quota"
+        namespace: "{{ namespace.name }}"
+      spec:
+        hard:
+          requests.cpu: "{{ n_requests_cpu }}"
+          requests.memory: "{{ n_requests_memory }}"
+          limits.cpu: "{{ n_limits_cpu }}"
+          limits.memory: "{{ n_limits_memory }}"
+  when: n_requests_enabled or n_limits_enabled
+
+- name: Manage Default LimitRange for {{ namespace.name }} namespace
+  kubernetes.core.k8s:
+    state: "{{ state }}"
+    definition:
+      apiVersion: v1
+      kind: LimitRange
+      metadata:
+        name: "{{ namespace.name }}-limits"
+        namespace: "{{ namespace.name }}"
+      spec:
+        limits:
+          - type: Container
+            default:
+              cpu: "{{ c_limits_cpu }}"
+              memory: "{{ c_limits_memory }}"
+            defaultRequest:
+              cpu: "{{ c_requests_cpu }}"
+              memory: "{{ c_requests_memory }}"
+  when: c_requests_enabled or c_limits_enabled

@@ -1,0 +1,11 @@
+---
+- name: Manage Kubernetes Namespace state
+  kubernetes.core.k8s:
+    state: "{{ state }}"
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ namespace.name }}"
+        labels: "{{ namespace.labels | default({}) }}"
+        annotations: "{{ namespace.annotations | default({}) }}"
