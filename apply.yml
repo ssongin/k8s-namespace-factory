@@ -5,23 +5,6 @@
   vars:
     openbao_address: "{{ lookup('env', 'OPENBAO_ADDR') | default('https://openbao.internal:8200', true) }}"
     openbao_token: "{{ lookup('env', 'OPENBAO_TOKEN') | default('', true) }}"
-
-    n_requests_enabled: "{{ namespace.resources.requests.enabled | default(namespace_resource_defaults.requests.enabled) }}"
-    n_requests_cpu: "{{ namespace.resources.requests.cpu | default(namespace_resource_defaults.requests.cpu) }}"
-    n_requests_memory: "{{ namespace.resources.requests.memory | default(namespace_resource_defaults.requests.memory) }}"
-
-    n_limits_enabled: "{{ namespace.resources.limits.enabled | default(namespace_resource_defaults.limits.enabled) }}"
-    n_limits_cpu: "{{ namespace.resources.limits.cpu | default(namespace_resource_defaults.limits.cpu) }}"
-    n_limits_memory: "{{ namespace.resources.limits.memory | default(namespace_resource_defaults.limits.memory) }}"
-    
-    c_requests_enabled: "{{ container.resources.requests.enabled | default(container_resource_defaults.resources.requests.enabled) }}"
-    c_requests_cpu: "{{ container.resources.requests.cpu | default(container_resource_defaults.resources.requests.cpu) }}"
-    c_requests_memory: "{{ container.resources.requests.memory | default(container_resource_defaults.resources.requests.memory) }}"
-    
-    c_limits_enabled: "{{ container.resources.limits.enabled | default(container_resource_defaults.resources.limits.enabled) }}"
-    c_limits_cpu: "{{ container.resources.limits.cpu | default(container_resource_defaults.resources.limits.cpu) }}"
-    c_limits_memory: "{{ container.resources.limits.memory | default(container_resource_defaults.resources.limits.memory) }}"
-
   tasks:
     - name: Teardown resources
       when: state | default('present') == 'absent'
