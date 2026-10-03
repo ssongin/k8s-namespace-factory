@@ -1,8 +1,11 @@
-# k8s-namespace-factory
+# <a name=top></a>K8s namespace factory
 
-- [About](#about)
-  - [Description](#description)
-  - [Ansible roles](#ansible-roles)
+- [K8s namespace factory](#top)
+  - [About](#about)
+    - [Description](#description)
+    - [Ansible roles](#ansible-roles)
+  - [Usage](#usage)
+    - [Local usage](#local-usage)
 
 ## <a name="about"></a> About
 
@@ -17,5 +20,13 @@ namespace, resources requests and limits per namespace/container. Create RBAC, s
 - **namespace** - Creates/Destroys namespace with annotations and labels.
 - **resource_quota** - Manages ResourceQuota and LimitRange
 
+## <a name="usage"></a> Usage
 
+### <a name="local-usage"></a> Local Usage
+
+Run CLI command from repository root directory.
+
+```bash
+docker compose run --rm ansible -i inventory apply.yml
+```
 
