@@ -1,3 +1,5 @@
+ansible_connection: local
+
 namespace_resource_defaults:
   requests:
     enabled: true
