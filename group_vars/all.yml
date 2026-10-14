@@ -2,21 +2,26 @@ ansible_connection: local
 
 namespace_resource_defaults:
   requests:
-    enabled: true
+    enabled: false
     cpu: "400m"
     memory: "100Mi"
   limits:
-    enabled: true
+    enabled: false
     cpu: "800m"
     memory: "300Mi"
 
 container_resource_defaults:
   resources:
     requests:
-      enabled: true
+      enabled: false
       cpu: "200m"
       memory: "100Mi"
     limits:
-      enabled: true
+      enabled: false
       cpu: "800m"
-      memory: "300Mi"      
+      memory: "300Mi"    
+
+externalSecretes_defaults:
+  clusterSecretStore:
+    name: "openbao"
+  refreshInterval: "1h"

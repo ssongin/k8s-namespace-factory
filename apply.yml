@@ -2,13 +2,14 @@
 - name: Declarative Kubernetes Namespace Management
   hosts: all
   gather_facts: false
-  vars:
-    openbao_address: "{{ lookup('env', 'OPENBAO_ADDR') | default('https://openbao.internal:8200', true) }}"
-    openbao_token: "{{ lookup('env', 'OPENBAO_TOKEN') | default('', true) }}"
   tasks:
     - name: Teardown resources
       when: state | default('present') == 'absent'
       block:
+        - name: Destroy External Secrets
+          ansible.builtin.include_role:
+            name: external-secrets
+
         - name: Destroy ResourceQuotas & LimitRanges
           ansible.builtin.include_role:
             name: resource_quota
@@ -28,9 +29,9 @@
           ansible.builtin.include_role:
             name: resource_quota
 
-        # - name: Role 3 - Generate and Sync Secrets
-        #   ansible.builtin.include_role:
-        #     name: secrets_manager
+        - name: Apply External Secrets via Operator
+          ansible.builtin.include_role:
+            name: external-secrets
 
 
         # - name: Role 5 - Apply Network Policies (MetalLB & Envoy Aware)

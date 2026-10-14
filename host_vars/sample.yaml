@@ -5,17 +5,38 @@ configurationItem:
   owner: "Your-Team-Name"
   environment: "Development"
   serviceOffering: "sample-service"
+  serviceOfferingId: "so-1234"
+  serviceComponent: "sample-component"
+  serviceComponentId: "sc-5678"
   description: "Sample namespace"
   costCenterCode: "CCC-1111"
   criticalityClass: "CC-1"
 
 namespace:
-  name: "sample-namespace"
+  name: "{{ configurationItem.serviceOfferingId }}-{{ configurationItem.serviceComponentId }}-{{ configurationItem.environment }}"
   annotations:
     description: "{{ configurationItem.description }}"
   labels:
     team: "{{ configurationItem.owner }}"
     environment: "{{ configurationItem.environment }}"
     service-offering: "{{ configurationItem.serviceOffering }}"
+    service-component: "{{ configurationItem.serviceComponent }}"
+    service-offering-id: "{{ configurationItem.serviceOfferingId }}"
+    service-component-id: "{{ configurationItem.serviceComponentId }}"
     cost-center: "{{ configurationItem.costCenterCode }}"
     criticality: "{{ configurationItem.criticalityClass }}"
+
+externalSecretes:
+  secrets:
+    - name: "kerberos-secrets"
+      target:
+        creationPolicy: "Owner"
+      data:
+        - secretKey: "kerberos-password"
+          remoteRef:
+            key: "eso/prod/so-1234/sc-5678"
+            property: "kerberos-password"
+        - secretKey: "kerberos-username"
+          remoteRef:
+            key: "eso/prod/so-1234/sc-5678"
+            property: "kerberos-username"

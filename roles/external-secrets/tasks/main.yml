@@ -1,0 +1,28 @@
+---
+- name: Ensure ExternalSecret resources are applied to namespace
+  kubernetes.core.k8s:
+    state: "{{ state }}"
+    api_version: external-secrets.io/v1
+    kind: ExternalSecret
+    namespace: "{{ namespace.name }}"
+    definition:
+      apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: "{{ secret_item.name }}"
+        namespace: "{{ namespace.name }}"
+      spec:
+        refreshInterval: "{{ secret_item.refreshInterval | default(externalSecretes_defaults.refreshInterval) | quote }}"
+        secretStoreRef:
+          name: "{{ externalSecretes.clusterSecretStore.name | default(externalSecretes_defaults.clusterSecretStore.name) }}"
+          kind: ClusterSecretStore
+        target:
+          name: "{{ secret_item.name }}"
+          creationPolicy: "{{ secret_item.target.creationPolicy | default('Owner') }}"
+        data: "{{ secret_item.data }}"
+  loop: "{{ externalSecretes.secrets | default([]) }}"
+  loop_control:
+    loop_var: secret_item
+  when: 
+    - externalSecretes is defined 
+    - externalSecretes.secrets is defined
