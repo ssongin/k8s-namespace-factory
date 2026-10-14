@@ -12,7 +12,7 @@
 
         - name: Destroy ResourceQuotas & LimitRanges
           ansible.builtin.include_role:
-            name: resource_quota
+            name: resource-quota
 
         - name: Destroy Namespace
           ansible.builtin.include_role:
@@ -27,7 +27,7 @@
 
         - name: Apply ResourceQuotas & LimitRanges
           ansible.builtin.include_role:
-            name: resource_quota
+            name: resource-quota
 
         - name: Apply External Secrets via Operator
           ansible.builtin.include_role:

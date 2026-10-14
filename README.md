@@ -18,7 +18,8 @@ namespace, resources requests and limits per namespace/container. Create RBAC, s
 ### <a name="ansible-roles"></a> Ansible roles
 
 - **namespace** - Creates/Destroys namespace with annotations and labels.
-- **resource_quota** - Manages ResourceQuota and LimitRange
+- **resource-quota** - Manages ResourceQuota and LimitRange
+- **external-secrets** - Creates ExternalSecrets resource based on provided ClusterSecretStore
 
 ## <a name="usage"></a> Usage
 
