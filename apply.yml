@@ -10,6 +10,10 @@
           ansible.builtin.include_role:
             name: external-secrets
 
+        - name: Destroy ConfigMaps
+          ansible.builtin.include_role:
+            name: configmap
+
         - name: Destroy ResourceQuotas & LimitRanges
           ansible.builtin.include_role:
             name: resource-quota
@@ -33,6 +37,9 @@
           ansible.builtin.include_role:
             name: external-secrets
 
+        - name: Apply ConfigMaps
+          ansible.builtin.include_role:
+            name: configmap
 
         # - name: Role 5 - Apply Network Policies (MetalLB & Envoy Aware)
         #   ansible.builtin.include_role:

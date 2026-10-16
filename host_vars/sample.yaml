@@ -3,11 +3,11 @@ state: present # Default state "present" can be overridden to "absent" to delete
 
 configurationItem:
   owner: "Your-Team-Name"
-  environment: "Development"
+  environment: "dev"
   serviceOffering: "sample-service"
-  serviceOfferingId: "so-1234"
+  serviceOfferingId: "so-sample"
   serviceComponent: "sample-component"
-  serviceComponentId: "sc-5678"
+  serviceComponentId: "sc-sample"
   description: "Sample namespace"
   costCenterCode: "CCC-1111"
   criticalityClass: "CC-1"
@@ -34,9 +34,18 @@ externalSecretes:
       data:
         - secretKey: "kerberos-password"
           remoteRef:
-            key: "eso/prod/so-1234/sc-5678"
+            key: "eso/prod/so-sample/sc-sample"
             property: "kerberos-password"
         - secretKey: "kerberos-username"
           remoteRef:
-            key: "eso/prod/so-1234/sc-5678"
+            key: "eso/prod/so-sample/sc-sample"
             property: "kerberos-username"
+
+configMaps:
+  - name: krb5-config
+    valuesFromFile:
+      krb5.conf: "files/{{ namespace.name }}/krb5.conf"
+  - name: my-configmap
+    values:
+      username: admin
+      password: secret

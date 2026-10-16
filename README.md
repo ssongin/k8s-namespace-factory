@@ -20,6 +20,7 @@ namespace, resources requests and limits per namespace/container. Create RBAC, s
 - **namespace** - Creates/Destroys namespace with annotations and labels.
 - **resource-quota** - Manages ResourceQuota and LimitRange
 - **external-secrets** - Creates ExternalSecrets resource based on provided ClusterSecretStore
+- **configmap** - Add configmap from files or properties
 
 ## <a name="usage"></a> Usage
 

@@ -25,3 +25,4 @@ externalSecretes_defaults:
   clusterSecretStore:
     name: "openbao"
   refreshInterval: "1h"
+  remoteRefKeyPrefix: "eso"

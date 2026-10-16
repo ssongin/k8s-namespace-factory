@@ -1,0 +1,35 @@
+- name: Create or update Kubernetes ConfigMaps from host_vars
+  kubernetes.core.k8s:
+    state: "{{ state | default('present') }}"
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "{{ cm_item.name }}"
+        namespace: "{{ namespace.name }}"
+      data: "{{ computed_data | from_json }}"
+  loop: "{{ configMaps | default([]) }}"
+  loop_control:
+    loop_var: cm_item
+    label: "{{ cm_item.name }}"
+  vars:
+    computed_data: >-
+      {%- set cm_data = {} -%}
+      
+      {# 1. Handle inline 'values' using bracket notation to avoid shadowing dict methods #}
+      {%- if 'values' in cm_item and cm_item['values'] -%}
+        {%- for k, v in cm_item['values'].items() -%}
+          {%- set _ = cm_data.update({k: v | string}) -%}
+        {%- endfor -%}
+      {%- endif -%}
+
+      {# 2. Handle external files and fix Windows CRLF (\r\n) line endings #}
+      {%- if 'valuesFromFile' in cm_item and cm_item['valuesFromFile'] -%}
+        {%- for file_key, file_path in cm_item['valuesFromFile'].items() -%}
+          {%- set file_content = lookup('file', playbook_dir ~ '/' ~ file_path) | string -%}
+          {%- set _ = cm_data.update({file_key: file_content.replace('\r\n', '\n')}) -%}
+        {%- endfor -%}
+      {%- endif -%}
+
+      {# 3. Output safely as JSON #}
+      {{- cm_data | to_json -}}
