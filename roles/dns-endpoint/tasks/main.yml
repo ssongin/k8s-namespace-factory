@@ -1,0 +1,23 @@
+---
+- name: Manage DNS endpoints for {{ namespace.name }} namespace
+  kubernetes.core.k8s:
+    state: "{{ state | default('present') }}"
+    api_version: externaldns.k8s.io/v1alpha1
+    kind: DNSEndpoint
+    namespace: "{{ namespace.name }}"
+    definition:
+      apiVersion: externaldns.k8s.io/v1alpha1
+      kind: DNSEndpoint
+      metadata:
+        name: "{{ dns_endpoint.name }}"
+        namespace: "{{ namespace.name }}"
+      spec:
+        endpoints:
+          - dnsName: "{{ dns_endpoint.record.name }}"
+            recordType: "{{ dns_endpoint.record.type }}"
+            targets: "{{ dns_endpoint.record.targets }}"
+            recordTTL: "{{ dns_endpoint.record.ttl }}"
+            providerSpecific: "{{ dns_endpoint.record.providerSpecific | default([]) }}"
+  loop: "{{ dns | default([]) }}"
+  loop_control:
+    loop_var: dns_endpoint

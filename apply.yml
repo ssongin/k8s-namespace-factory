@@ -6,6 +6,14 @@
     - name: Teardown resources
       when: state | default('present') == 'absent'
       block:
+        - name: Destroy DNS endpoints
+          ansible.builtin.include_role:
+            name: dns-endpoint
+
+        - name: Destroy HTTPRoutes
+          ansible.builtin.include_role:
+            name: http-route
+
         - name: Destroy External Secrets
           ansible.builtin.include_role:
             name: external-secrets
@@ -28,6 +36,14 @@
         - name: Provision Namespace
           ansible.builtin.include_role:
             name: namespace
+
+        - name: Apply DNS endpoints
+          ansible.builtin.include_role:
+            name: dns-endpoint
+
+        - name: Apply HTTPRoutes
+          ansible.builtin.include_role:
+            name: http-route
 
         - name: Apply ResourceQuotas & LimitRanges
           ansible.builtin.include_role:

@@ -12,17 +12,17 @@
         name: "{{ secret_item.name }}"
         namespace: "{{ namespace.name }}"
       spec:
-        refreshInterval: "{{ secret_item.refreshInterval | default(externalSecretes_defaults.refreshInterval) | quote }}"
+        refreshInterval: "{{ secret_item.refreshInterval | default(externalSecrets_defaults.refreshInterval) | quote }}"
         secretStoreRef:
-          name: "{{ externalSecretes.clusterSecretStore.name | default(externalSecretes_defaults.clusterSecretStore.name) }}"
+          name: "{{ externalSecrets.clusterSecretStore.name | default(externalSecrets_defaults.clusterSecretStore.name) }}"
           kind: ClusterSecretStore
         target:
           name: "{{ secret_item.name }}"
           creationPolicy: "{{ secret_item.target.creationPolicy | default('Owner') }}"
         data: "{{ secret_item.data }}"
-  loop: "{{ externalSecretes.secrets | default([]) }}"
+  loop: "{{ externalSecrets.secrets | default([]) }}"
   loop_control:
     loop_var: secret_item
   when: 
-    - externalSecretes is defined 
-    - externalSecretes.secrets is defined
+    - externalSecrets is defined 
+    - externalSecrets.secrets is defined
