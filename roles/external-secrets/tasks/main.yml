@@ -23,6 +23,6 @@
   loop: "{{ externalSecrets.secrets | default([]) }}"
   loop_control:
     loop_var: secret_item
-  when: 
-    - externalSecrets is defined 
+  when:
+    - externalSecrets is defined
     - externalSecrets.secrets is defined

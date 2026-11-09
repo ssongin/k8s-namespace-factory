@@ -4,6 +4,10 @@ Create and manage Kubernetes namespaces and their supporting resources with
 Ansible. Describe what each namespace needs in inventory variables, then let
 the playbook apply or remove those resources.
 
+See the [project documentation](https://ssongin.github.io/k8s-namespace-factory/)
+for guidance for users, repository maintainers, and Kubernetes
+provisioners/providers.
+
 ## 📚 Contents
 
 - [🧭 How it works](#how-it-works)

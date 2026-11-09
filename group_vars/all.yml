@@ -19,10 +19,32 @@ container_resource_defaults:
     limits:
       enabled: false
       cpu: "800m"
-      memory: "300Mi"    
+      memory: "300Mi"
 
-externalSecretes_defaults:
+externalSecrets_defaults:
   clusterSecretStore:
     name: "openbao"
   refreshInterval: "1h"
   remoteRefKeyPrefix: "eso"
+
+httpRoutes_defaults:
+  gateway:
+    internal:
+      name: internal
+      namespace: envoy-gateway-system
+    external:
+      name: external
+      namespace: envoy-gateway-system
+
+dns_defaults:
+  external:
+    name: .songin.net
+    targets:
+      - 84.240.52.225
+    ttl: 300
+    providerSpecific:
+      - name: cloudflare/proxied
+        value: "false"
+  internal:
+    name: .internal.songin.net
+    ttl: 300

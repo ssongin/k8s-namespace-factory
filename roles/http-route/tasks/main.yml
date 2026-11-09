@@ -1,5 +1,5 @@
 ---
-- name: Manage HTTPRoutes for {{ namespace.name }} namespace
+- name: Manage HTTPRoutes for namespace {{ namespace.name }}
   kubernetes.core.k8s:
     state: "{{ state | default('present') }}"
     api_version: gateway.networking.k8s.io/v1

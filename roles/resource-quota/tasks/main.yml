@@ -1,5 +1,5 @@
 ---
-- name: Manage ResourceQuota for {{ namespace.name }} namespace
+- name: Manage ResourceQuota for namespace {{ namespace.name }}
   kubernetes.core.k8s:
     state: "{{ state }}"
     definition:
@@ -16,7 +16,7 @@
           limits.memory: "{{ n_limits_memory }}"
   when: n_requests_enabled or n_limits_enabled
 
-- name: Manage Default LimitRange for {{ namespace.name }} namespace
+- name: Manage Default LimitRange for namespace {{ namespace.name }}
   kubernetes.core.k8s:
     state: "{{ state }}"
     definition:
