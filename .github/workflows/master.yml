@@ -1,0 +1,67 @@
+name: Master checks and release
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  validate-commit-message:
+    uses: ssongin/gha-commit/.github/workflows/validate-commit-message.yml@master
+
+  ansible:
+    uses: ssongin/gha-ansible/.github/workflows/ansible.yml@master
+    with:
+      working_directory: .
+      galaxy_requirements_file: requirements.yml
+      playbook: apply.yml
+      validate_vars: true
+      schema_file: schemas/namespace-schema.json
+      vars_paths: host_vars
+
+  bump-version-tag:
+    needs:
+      - validate-commit-message
+      - ansible
+    permissions:
+      contents: write
+    uses: ssongin/gha-commit/.github/workflows/bump-version-tag.yml@master
+
+  publish-latest-docs:
+    needs:
+      - validate-commit-message
+      - ansible
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: ssongin/gha-docs/.github/workflows/publish-docs.yml@master
+    with:
+      pages_url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+      docs_dir: docs
+      dist_dir: docs/.vitepress/dist
+      install_command: npm ci --prefix docs
+      build_command: npm --prefix docs run docs:build
+      node_version: '22'
+      pages_branch: gh-pages
+
+  publish-tagged-docs:
+    needs:
+      - bump-version-tag
+      - publish-latest-docs
+    if: needs.bump-version-tag.outputs.tag != ''
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: ssongin/gha-docs/.github/workflows/publish-docs.yml@master
+    with:
+      pages_url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+      docs_dir: docs
+      dist_dir: docs/.vitepress/dist
+      install_command: npm ci --prefix docs
+      build_command: npm --prefix docs run docs:build
+      node_version: '22'
+      pages_branch: gh-pages
+      deployment_path: versions/${{ needs.bump-version-tag.outputs.tag }}

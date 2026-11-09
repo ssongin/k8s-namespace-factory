@@ -1,0 +1,44 @@
+name: Pull request checks
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+
+jobs:
+  validate-commit-message:
+    uses: ssongin/gha-commit/.github/workflows/validate-commit-message.yml@master
+
+  ansible:
+    uses: ssongin/gha-ansible/.github/workflows/ansible.yml@master
+    with:
+      working_directory: .
+      galaxy_requirements_file: requirements.yml
+      playbook: apply.yml
+      validate_vars: true
+      schema_file: schemas/namespace-schema.json
+      vars_paths: host_vars
+
+  publish-docs:
+    needs:
+      - validate-commit-message
+      - ansible
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: ssongin/gha-docs/.github/workflows/publish-docs.yml@master
+    with:
+      pages_url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+      docs_dir: docs
+      dist_dir: docs/.vitepress/dist
+      install_command: npm ci --prefix docs
+      build_command: npm --prefix docs run docs:build
+      node_version: '22'
+      pages_branch: gh-pages

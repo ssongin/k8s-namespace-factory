@@ -1,0 +1,22 @@
+---
+- name: Manage HTTPRoutes for namespace {{ namespace.name }}
+  kubernetes.core.k8s:
+    state: "{{ state | default('present') }}"
+    api_version: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    namespace: "{{ namespace.name }}"
+    definition:
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: "{{ http_route.name }}"
+        namespace: "{{ namespace.name }}"
+      spec:
+        parentRefs:
+          - name: "{{ (http_route.gateway | default(httpRoutes_defaults.gateway.internal)).name }}"
+            namespace: "{{ (http_route.gateway | default(httpRoutes_defaults.gateway.internal)).namespace }}"
+        hostnames: "{{ http_route.hostnames }}"
+        rules: "{{ http_route.rules }}"
+  loop: "{{ httpRoutes | default([]) }}"
+  loop_control:
+    loop_var: http_route

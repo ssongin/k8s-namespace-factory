@@ -15,7 +15,7 @@
   vars:
     computed_data: >-
       {%- set cm_data = {} -%}
-      
+
       {# 1. Handle inline 'values' using bracket notation to avoid shadowing dict methods #}
       {%- if 'values' in cm_item and cm_item['values'] -%}
         {%- for k, v in cm_item['values'].items() -%}

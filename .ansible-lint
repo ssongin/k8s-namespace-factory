@@ -1,0 +1,4 @@
+skip_list:
+  # Existing role paths and host-variable keys are part of the project interface.
+  - role-name
+  - var-naming
